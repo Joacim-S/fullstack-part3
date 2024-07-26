@@ -79,19 +79,20 @@ app.post('/api/persons', (request, response, next) => {
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-  const body = request.body
+  const { name, number } = request.body
 
-  const person = {
-    name: body.name,
-    number: body.number
-  }
-
-  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+  Person.findByIdAndUpdate(
+    request.params.id,
+    { name, number },
+    { new: true, runValidators: true, context: 'query' }
+  )
     .then(updatedPerson => {
       if (updatedPerson) {
         response.json(updatedPerson)
       } else {
-        response.status(404).end()
+        response.status(404).json({
+          error: `Information of ${name} has already been removed from server`
+        })
       }
     })
     .catch(error => next(error))
