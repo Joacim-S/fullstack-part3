@@ -27,13 +27,14 @@ if (process.argv.length === 3) {
     result.forEach(person => {
       console.log(person.name, person.number)
     })
-  mongoose.connection.close()
+    mongoose.connection.close()
   })
 } else {
   const person = new Person({
     name: process.argv[3],
     number: process.argv[4]
   })
+  // eslint-disable-next-line no-unused-vars
   person.save().then(result => {
     console.log('Contact added')
     mongoose.connection.close()
